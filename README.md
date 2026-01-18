@@ -64,7 +64,11 @@ Custom system prompt with 50+ reference products, water breakdown formulas, and 
 git clone https://github.com/krauzx/blueprint.git
 cd blueprint
 pip install -r requirements.txt
-echo "GEMINI_API_KEY=your_key" > .env
+
+# Create secrets file
+mkdir .streamlit
+echo 'GEMINI_API_KEY = "your_key_here"' > .streamlit/secrets.toml
+
 streamlit run app.py
 ```
 
@@ -90,7 +94,3 @@ src/
   analytics.py          # Trend analysis + challenges
   utils.py              # Helpers
 ```
-
----
-
-**Built in 48 hours. Designed for 2026.** Every scan counts. 💧🌍

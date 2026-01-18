@@ -1,8 +1,19 @@
 import os
 from dataclasses import dataclass, field
-from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    import streamlit as st
+    USE_SECRETS = True
+except ImportError:
+    USE_SECRETS = False
+
+def get_secret(key, default=""):
+    if USE_SECRETS and hasattr(st, 'secrets'):
+        try:
+            return st.secrets.get(key, default)
+        except (FileNotFoundError, KeyError):
+            pass
+    return os.getenv(key, default)
 
 
 @dataclass(frozen=True)
@@ -12,16 +23,16 @@ class AppConfig:
     APP_VERSION: str = "1.0.0"
     APP_ICON: str = "💧"
     
-    GEMINI_API_KEY: str = field(default_factory=lambda: os.getenv("GEMINI_API_KEY", ""))
+    GEMINI_API_KEY: str = field(default_factory=lambda: get_secret("GEMINI_API_KEY", ""))
     GEMINI_MODEL: str = field(
-        default_factory=lambda: os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        default_factory=lambda: get_secret("GEMINI_MODEL", "gemini-2.5-flash")
     )
     
     API_TIMEOUT_SECONDS: int = field(
-        default_factory=lambda: int(os.getenv("API_TIMEOUT_SECONDS", 30))
+        default_factory=lambda: int(get_secret("API_TIMEOUT_SECONDS", "30"))
     )
     MAX_IMAGE_SIZE_MB: int = field(
-        default_factory=lambda: int(os.getenv("MAX_IMAGE_SIZE_MB", 10))
+        default_factory=lambda: int(get_secret("MAX_IMAGE_SIZE_MB", "10"))
     )
     DAILY_DRINKING_WATER_LITERS: float = 3.0
     SHOWER_LITERS_PER_MINUTE: float = 9.5

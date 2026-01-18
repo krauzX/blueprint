@@ -185,8 +185,9 @@ with st.sidebar:
 ok, err = validate_config()
 if not ok:
     st.error(f"⚠️ {err}")
-    st.info("Add your API key to a `.env` file:")
-    st.code("GEMINI_API_KEY=your_key_here")
+    st.info("Add your API key to `.streamlit/secrets.toml`:")
+    st.code('GEMINI_API_KEY = "your_key_here"', language="toml")
+    st.caption("Or set environment variable: `GEMINI_API_KEY=your_key`")
     st.stop()
 
 st.markdown('<div class="section-title">📸 Analyze a Product</div>', unsafe_allow_html=True)
